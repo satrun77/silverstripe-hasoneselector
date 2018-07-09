@@ -1,0 +1,28 @@
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="lib/phpunit/phpunit.xsd"
+        bootstrap="../framework/tests/bootstrap.php"
+        colors="true"
+>
+
+    <testsuites>
+        <testsuite name="Test cases">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory>.</directory>
+            <exclude>
+                <directory>tests/</directory>
+                <directory>_config/</directory>
+                <directory>client/</directory>
+                <directory>docs/</directory>
+                <directory>lang/</directory>
+                <directory>templates/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+</phpunit>

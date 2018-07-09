@@ -1,0 +1,23 @@
+language: php
+php:
+  - 5.6
+  - 7.1
+  - 7.2
+
+env:
+  - DB=MYSQL CORE_RELEASE=3.6
+
+before_script:
+  - echo -e "[server]\nmax_allowed_packet=16777216\nwait_timeout=28800" | sudo tee -a /etc/mysql/my.cnf
+  - sudo service mysql restart
+  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
+  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
+  - cd ~/builds/ss
+
+script: phpunit -c hasoneselector/ --coverage-clover=coverage.clover hasoneselector/tests
+
+after_script:
+  - mv coverage.clover hasoneselector/coverage.clover
+  - cd hasoneselector
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

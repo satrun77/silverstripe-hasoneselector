@@ -1,0 +1,31 @@
+{
+    "name": "satrun77/hasoneselector",
+    "description": "This module provides CMS field to manage data object defined in a has_one relation.",
+    "keywords": [
+        "silverstripe",
+        "forms",
+        "formfield",
+        "cms",
+        "has_one",
+        "gridfield",
+        "cwp"
+    ],
+    "type": "silverstripe-module",
+    "homepage": "https://github.com/satrun77/silverstripe-hasoneselector",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohamed Alsharaf",
+            "email": "mohamed.alsharaf@gmail.com",
+            "homepage": "http://my.geek.nz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "silverstripe/framework": "~3.6"
+    },
+    "support": {
+        "issues": "https://github.com/satrun77/silverstripe-hasoneselector/issues"
+    }
+}
