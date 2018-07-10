@@ -7,7 +7,7 @@
 HasOneSelector is a module that provides CMS field to manage data object defined in a has_one relation.
 
 ## Installation via Composer
-	composer require satrun77/hasoneselector
+	composer require moo/hasoneselector
 
 ## Usage
 

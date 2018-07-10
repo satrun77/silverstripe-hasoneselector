@@ -1,5 +1,5 @@
 {
-    "name": "satrun77/hasoneselector",
+    "name": "moo/hasoneselector",
     "description": "This module provides CMS field to manage data object defined in a has_one relation.",
     "keywords": [
         "silverstripe",
