@@ -4,6 +4,11 @@ php:
   - 7.1
   - 7.2
 
+matrix:
+  exclude:
+  - php: 7.2
+    env: DB=MYSQL CORE_RELEASE=3.6
+
 env:
   - DB=MYSQL CORE_RELEASE=3.6
 
