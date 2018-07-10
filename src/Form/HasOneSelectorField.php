@@ -58,7 +58,7 @@ class HasOneSelectorField extends GridField
         // Set empty string based on the data class
         $this->setEmptyString(sprintf('No %s selected', strtolower(singleton($dataClass)->singular_name())));
 
-        return parent::__construct($name . 'ID', $title, $dataList, $config);
+        parent::__construct($name . 'ID', $title, $dataList, $config);
     }
 
     /**
