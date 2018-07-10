@@ -7,12 +7,23 @@
 
 HasOneSelector is a module that provides CMS field to manage data object defined in a has_one relation.
 
+## Requirements
+
+* SilverStripe CMS ^4.1
+
+For a SilverStripe 3.x compatible version, please see the [3.x branch, or 1.x releases](https://github.com/satrun77/silverstripe-hasoneselector/tree/3.x).
+
 ## Installation via Composer
 	composer require moo/hasoneselector
 
 ## Usage
 
 ```php
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\CMS\Model\SiteTree;
+use Moo\HasOneSelector\Form\Field;
+
 class Resource extends DataObject
 {
     //...
@@ -29,7 +40,7 @@ class Page extends SiteTree
     {
         $fields = parent::getCMSFields();
 
-        $resource = HasOneSelectorField::create('Resource', 'Resource', $this, Resource::class);
+        $resource = Field::create('Resource', 'Resource', $this, Resource::class);
         $fields->addFieldToTab('Root.Main', $resource);
 
         return $fields;

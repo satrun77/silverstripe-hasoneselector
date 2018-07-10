@@ -1,21 +1,28 @@
 <?php
 
+namespace Moo\HasOneSelector\ORM;
+
+use Exception;
+use SilverStripe\ORM\DataList as BaseDataList;
+use SilverStripe\ORM\DataObject;
+use Moo\HasOneSelector\Form\Field;
+
 /**
- * Class HasOneSelectorDataList is data list to manage add/remove managed object from the
+ * Class DataList is data list to manage add/remove managed object from the
  * HasOneSelectorField class
  */
-class HasOneSelectorDataList extends DataList
+class DataList extends BaseDataList
 {
     /**
-     * @var HasOneSelectorField
+     * @var Field
      */
     protected $gridField;
 
     /**
      * HasOneSelectorDataList constructor.
-     * @param HasOneSelectorField $gridField
+     * @param Field $gridField
      */
-    public function __construct(HasOneSelectorField $gridField)
+    public function __construct(Field $gridField)
     {
         $this->gridField = $gridField;
 
@@ -25,9 +32,9 @@ class HasOneSelectorDataList extends DataList
     /**
      * Set the current selected record into the has one relation
      *
-     * @param  DataObject          $item
+     * @param  DataObject $item
      * @return void
-     * @throws ValidationException
+     * @throws Exception
      */
     public function add($item)
     {
@@ -37,9 +44,9 @@ class HasOneSelectorDataList extends DataList
     /**
      * Clear the record within the has one relation
      *
-     * @param  DataObject          $item
+     * @param  DataObject $item
      * @return void
-     * @throws ValidationException
+     * @throws Exception
      */
     public function remove($item)
     {

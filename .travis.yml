@@ -1,29 +1,27 @@
 language: php
-php:
-  - 5.6
-  - 7.1
-  - 7.2
-
-matrix:
-  exclude:
-  - php: 7.2
-    env: DB=MYSQL CORE_RELEASE=3.6
 
 env:
-  - DB=MYSQL CORE_RELEASE=3.6
-  - DB=MYSQL CORE_RELEASE=3.7
+  global:
+    - COMPOSER_ROOT_VERSION="3.1.x-dev"
+
+matrix:
+  include:
+    - php: 7.1
+      env: DB=MYSQL RECIPE_VERSION=4.2.x-dev
+    - php: 7.2
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev
 
 before_script:
-  - echo -e "[server]\nmax_allowed_packet=16777216\nwait_timeout=28800" | sudo tee -a /etc/mysql/my.cnf
-  - sudo service mysql restart
-  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
-  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
-  - cd ~/builds/ss
+  - phpenv rehash
+  - phpenv config-rm xdebug.ini
 
-script: vendor/bin/phpunit -c hasoneselector/ --coverage-clover=coverage.clover hasoneselector/tests
+  - composer validate
+  - composer require silverstripe/recipe-core "$RECIPE_VERSION"  --no-update
+  - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
-after_script:
-  - mv coverage.clover hasoneselector/coverage.clover
-  - cd hasoneselector
+script:
+  - phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.clover
+
+after_success:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

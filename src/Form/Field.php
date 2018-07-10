@@ -1,10 +1,25 @@
 <?php
 
+namespace Moo\HasOneSelector\Form;
+
+use Exception;
+use Moo\HasOneSelector\ORM\DataList;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridFieldFilterHeader;
+use SilverStripe\Forms\GridField\GridFieldPageCount;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
+use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\SS_List;
+use SilverStripe\View\Requirements;
+
 /**
- * Class HasOneSelectorField provides CMS field to manage selecting/adding/editing object within
+ * Class Field provides CMS field to manage selecting/adding/editing object within
  * has_one relation of the current object being edited
  */
-class HasOneSelectorField extends GridField
+class Field extends GridField
 {
     /**
      * Name of the list data class
@@ -37,15 +52,15 @@ class HasOneSelectorField extends GridField
     public function __construct($name, $title = null, DataObject $owner, $dataClass = DataObject::class)
     {
         // Include styles
-        Requirements::css('hasoneselector/client/styles/hasoneselector.css');
+        Requirements::css('moo/hasoneselector:client/styles/hasoneselector.css');
 
         // Initiate grid field configuration based on relation editor
         $config = GridFieldConfig_RelationEditor::create();
-        $config->removeComponentsByType('GridFieldToolbarHeader');
-        $config->removeComponentsByType('GridFieldSortableHeader');
-        $config->removeComponentsByType('GridFieldFilterHeader');
-        $config->removeComponentsByType('GridFieldPageCount');
-        $config->removeComponentsByType('GridFieldPaginator');
+        $config->removeComponentsByType(GridFieldToolbarHeader::class);
+        $config->removeComponentsByType(GridFieldSortableHeader::class);
+        $config->removeComponentsByType(GridFieldFilterHeader::class);
+        $config->removeComponentsByType(GridFieldPageCount::class);
+        $config->removeComponentsByType(GridFieldPaginator::class);
 
         // Set the data class of the list
         $this->setDataClass($dataClass);
@@ -53,7 +68,7 @@ class HasOneSelectorField extends GridField
         $this->setOwner($owner);
 
         // Instance of data list that manages the grid field data
-        $dataList = HasOneSelectorDataList::create($this);
+        $dataList = DataList::create($this);
 
         // Set empty string based on the data class
         $this->setEmptyString(sprintf('No %s selected', strtolower(singleton($dataClass)->singular_name())));
@@ -111,9 +126,9 @@ class HasOneSelectorField extends GridField
     /**
      * Set the record of the has one relation for current owner object
      *
-     * @param  DataObject|null     $object
+     * @param  DataObject|null $object
      * @return void
-     * @throws ValidationException
+     * @throws Exception
      */
     public function setRecord($object)
     {

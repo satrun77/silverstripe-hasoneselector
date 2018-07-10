@@ -1,10 +1,9 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="lib/phpunit/phpunit.xsd"
-        bootstrap="../framework/tests/bootstrap.php"
+        bootstrap="vendor/silverstripe/framework/tests/bootstrap.php"
         colors="true"
 >
-
     <testsuites>
         <testsuite name="Test cases">
             <directory suffix="Test.php">./tests</directory>

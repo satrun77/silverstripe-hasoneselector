@@ -1,4 +1,4 @@
-ResourceTest:
+Moo\HasOneSelector\Tests\Object\ResourceTest:
     resource-1:
         Title: Resource 1
 
@@ -17,7 +17,7 @@ ResourceTest:
     resource-6:
         Title: Resource 6
 
-PageTest:
+Moo\HasOneSelector\Tests\Object\PageTest:
     page-1:
         Title: Page one
 

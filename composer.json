@@ -22,10 +22,27 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
-        "silverstripe/framework": "~3.6"
+        "php": ">=7.1",
+        "silverstripe/vendor-plugin": "^1.0",
+        "silverstripe/framework": "^4.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "silverstripe/versioned": "^1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Moo\\HasOneSelector\\": "src/"
+        }
     },
     "support": {
         "issues": "https://github.com/satrun77/silverstripe-hasoneselector/issues"
-    }
+    },
+    "extra": {
+        "expose": [
+            "client"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

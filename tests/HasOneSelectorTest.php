@@ -1,25 +1,36 @@
 <?php
 
+namespace Moo\HasOneSelector\Tests;
+
+use Moo\HasOneSelector\Form\Field;
+use Moo\HasOneSelector\Tests\Object\PageTest;
+use Moo\HasOneSelector\Tests\Object\ResourceTest;
+use Moo\HasOneSelector\Tests\Object\ControllerTest;
+use SilverStripe\Control\Controller;
+use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Form;
+
 class HasOneSelectorTest extends FunctionalTest
 {
     protected static $fixture_file = 'HasOneSelectorTest.yml';
 
     public function testNoItemSelected()
     {
-        $page  = $this->getPage('page-1');
+        $page = $this->getPage('page-1');
         $field = $this->getField($page)->setEmptyString('No data selected');
-        $form  = new Form(Controller::curr(), 'Form', FieldList::create($field), FieldList::create());
-        $html  = $field->FieldHolder();
+        $form = new Form(new ControllerTest, 'Form', FieldList::create($field), FieldList::create());
+        $html = $field->FieldHolder();
 
-        $this->assertContains('No data selected', $html->RAW());
+        $this->assertContains('No data selected', $html);
         $this->assertEquals(ResourceTest::class, $field->getDataClass());
         $this->assertFalse($field->getRecord()->exists());
     }
 
     public function testSelectedItem()
     {
-        $page     = $this->getPage('page-1');
-        $field    = $this->getField($page)->setEmptyString('No data selected');
+        $page = $this->getPage('page-1');
+        $field = $this->getField($page)->setEmptyString('No data selected');
         $resource = $this->getResource('resource-1');
         $page->setField('ResourceID', $resource->ID);
         $form = new Form(Controller::curr(), 'Form', FieldList::create($field), FieldList::create());
@@ -33,12 +44,12 @@ class HasOneSelectorTest extends FunctionalTest
 
     public function testSelectingRemovingItem()
     {
-        $page     = $this->getPage('page-1');
-        $field    = $this->getField($page);
+        $page = $this->getPage('page-1');
+        $field = $this->getField($page);
 
         $resource = $this->getResource('resource-1');
         $field->getList()->add($resource);
-        $form = new Form(Controller::curr(), 'Form', FieldList::create($field), FieldList::create());
+        $form = new Form(new ControllerTest, 'Form', FieldList::create($field), FieldList::create());
 
         $this->assertInstanceOf(ResourceTest::class, $field->getRecord());
         $this->assertInstanceOf(PageTest::class, $field->getOwner());
@@ -47,9 +58,9 @@ class HasOneSelectorTest extends FunctionalTest
         $this->assertEquals($resource->Title, $field->getColumnContent($field->getRecord(), 'Title'));
 
         $field->getList()->remove($resource);
-        $html  = $field->FieldHolder();
+        $html = $field->FieldHolder();
 
-        $this->assertContains('No resource test selected', $html->RAW());
+        $this->assertContains('No resource test selected', $html);
         $this->assertEquals(ResourceTest::class, $field->getDataClass());
         $this->assertFalse($field->getRecord()->exists());
     }
@@ -73,29 +84,11 @@ class HasOneSelectorTest extends FunctionalTest
     }
 
     /**
-     * @return HasOneSelectorField
-     * @param  mixed               $page
+     * @return Field
+     * @param  mixed $page
      */
     protected function getField($page)
     {
-        return HasOneSelectorField::create('Resource', 'Resource', $page, ResourceTest::class);
+        return Field::create('Resource', 'Resource', $page, ResourceTest::class);
     }
-}
-
-class ResourceTest extends DataObject
-{
-    private static $db = [
-        'Title' => 'Varchar',
-    ];
-}
-
-class PageTest extends DataObject
-{
-    private static $db = [
-        'Title' => 'Varchar',
-    ];
-
-    private static $has_one = [
-        'Resource' => ResourceTest::class,
-    ];
 }

@@ -1,24 +1,11 @@
-.ss-gridfield-buttonrow {
-    width: 100%;
+.grid-field {
+    margin-bottom: 1rem;
 }
-
-.add-existing-autocompleter {
-    float: right;
-    margin: 0 !important;
+.grid-field__table {
+    margin: 0;
+    min-width: auto;
+    border: 1px solid #dbe0e9;
 }
-
-.ss-gridfield-buttonrow.ss-gridfield-buttonrow-before {
-    float: left;
-}
-
-.cms table.ss-gridfield-table td:first-child {
-    border-left: 0 none;
-}
-
-.cms table.ss-gridfield-table td:last-child {
-    border: 0 none;
-}
-
-.cms table.ss-gridfield-table {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+.grid-field__table td {
+    padding: 0.8rem;
 }
