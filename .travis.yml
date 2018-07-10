@@ -14,7 +14,7 @@ before_script:
   - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
   - cd ~/builds/ss
 
-script: phpunit -c hasoneselector/ --coverage-clover=coverage.clover hasoneselector/tests
+script: vendor/bin/phpunit -c hasoneselector/ --coverage-clover=coverage.clover hasoneselector/tests
 
 after_script:
   - mv coverage.clover hasoneselector/coverage.clover
