@@ -25,6 +25,8 @@
         "php": ">=5.6",
         "silverstripe/framework": "~3.6"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/satrun77/silverstripe-hasoneselector/issues"
     }
