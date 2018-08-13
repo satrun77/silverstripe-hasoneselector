@@ -62,6 +62,36 @@ class HasOneSelectorField extends GridField
     }
 
     /**
+     * @param array $fields
+     * @return $this
+     */
+    public function setDisplayFields(array $fields)
+    {
+        // Get grid field configuration
+        $config = $this->getConfig();
+
+        // Define columns to display in grid field
+        $config->getComponentByType('GridFieldDataColumns')->setDisplayFields($fields);
+
+        return $this;
+    }
+
+    /**
+     * @param array $formatting
+     * @return $this
+     */
+    public function setFieldFormatting(array $formatting)
+    {
+        // Get grid field configuration
+        $config = $this->getConfig();
+
+        // Customise the display of the column
+        $config->getComponentByType('GridFieldDataColumns')->setFieldFormatting($formatting);
+
+        return $this;
+    }
+
+    /**
      * Set empty string when no record selected
      *
      * @param  string $string
