@@ -7,15 +7,15 @@
 class HasOneSelectorDataList extends DataList
 {
     /**
-     * @var HasOneSelectorField
+     * @var HasOneSelectorGridField
      */
     protected $gridField;
 
     /**
      * HasOneSelectorDataList constructor.
-     * @param HasOneSelectorField $gridField
+     * @param HasOneSelectorGridField $gridField
      */
-    public function __construct(HasOneSelectorField $gridField)
+    public function __construct(HasOneSelectorGridField $gridField)
     {
         $this->gridField = $gridField;
 
@@ -25,9 +25,8 @@ class HasOneSelectorDataList extends DataList
     /**
      * Set the current selected record into the has one relation
      *
-     * @param  DataObject          $item
+     * @param  DataObject $item
      * @return void
-     * @throws ValidationException
      */
     public function add($item)
     {
@@ -37,9 +36,8 @@ class HasOneSelectorDataList extends DataList
     /**
      * Clear the record within the has one relation
      *
-     * @param  DataObject          $item
+     * @param  DataObject $item
      * @return void
-     * @throws ValidationException
      */
     public function remove($item)
     {
