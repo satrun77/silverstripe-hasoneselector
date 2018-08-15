@@ -51,7 +51,7 @@ class GridField extends SSGridField
     protected $valueField;
 
     /**
-     * HasOneSelectorField constructor.
+     * HasOneSelector GridField constructor.
      * @param string     $name
      * @param string     $title
      * @param DataObject $owner
