@@ -5,7 +5,6 @@ namespace Moo\HasOneSelector\Form;
 use Exception;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FormField;
-use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\DataObject;
 
