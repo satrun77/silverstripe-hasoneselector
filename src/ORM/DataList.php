@@ -3,9 +3,9 @@
 namespace Moo\HasOneSelector\ORM;
 
 use Exception;
+use Moo\HasOneSelector\Form\GridField;
 use SilverStripe\ORM\DataList as BaseDataList;
 use SilverStripe\ORM\DataObject;
-use Moo\HasOneSelector\Form\Field;
 
 /**
  * Class DataList is data list to manage add/remove managed object from the
@@ -14,15 +14,15 @@ use Moo\HasOneSelector\Form\Field;
 class DataList extends BaseDataList
 {
     /**
-     * @var Field
+     * @var GridField
      */
     protected $gridField;
 
     /**
      * HasOneSelectorDataList constructor.
-     * @param Field $gridField
+     * @param GridField $gridField
      */
-    public function __construct(Field $gridField)
+    public function __construct(GridField $gridField)
     {
         $this->gridField = $gridField;
 
