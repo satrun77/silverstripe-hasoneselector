@@ -9,10 +9,10 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\DataObject;
 
 /**
- * Class HasOneSelectorField provides CMS field to manage selecting/adding/editing object within
+ * Class Field provides CMS field to manage selecting/adding/editing object within
  * has_one relation of the current object being edited
  */
-class HasOneSelectorField extends CompositeField
+class Field extends CompositeField
 {
     /**
      * Instance of form field that find and display selected record
@@ -29,7 +29,7 @@ class HasOneSelectorField extends CompositeField
     protected $valueField;
 
     /**
-     * HasOneSelectorField constructor
+     * HasOneSelector Field constructor
      *
      * @param string     $name
      * @param string     $title
