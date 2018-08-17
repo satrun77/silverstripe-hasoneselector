@@ -5,6 +5,9 @@ namespace Moo\HasOneSelector\Form;
 use Exception;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FormField;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldComponent;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\DataObject;
 
@@ -83,6 +86,78 @@ class Field extends CompositeField
         $this->gridField->setValueHolderField($this->getValueHolderField());
 
         return $this->gridField;
+    }
+
+    /**
+     * Remove the linkable grid field component
+     *
+     * @return $this
+     */
+    public function removeLinkable()
+    {
+        // Remove grid field linkable component
+        $this->gridField->getConfig()->getComponents()->each(function ($component) {
+            if ($component instanceof GridFieldAddExistingAutocompleter) {
+                $this->gridField->getConfig()->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
+            }
+        });
+
+        return $this;
+    }
+
+    /**
+     * Add linkable grid field component
+     *
+     * @param  GridFieldComponent|null $component
+     * @return $this
+     */
+    public function enableLinkable(GridFieldComponent $component = null)
+    {
+        // Use default linkable grid field component
+        if (is_null($component)) {
+            $component = new GridFieldAddExistingAutocompleter('buttons-before-right');
+        }
+
+        // Add grid field component
+        $this->gridField->getConfig()->addComponent($component);
+
+        return $this;
+    }
+
+    /**
+     * Remove the addable grid field component
+     *
+     * @return $this
+     */
+    public function removeAddable()
+    {
+        // Remove grid field addable component
+        $this->gridField->getConfig()->getComponents()->each(function ($component) {
+            if ($component instanceof GridFieldAddNewButton) {
+                $this->gridField->getConfig()->removeComponentsByType(GridFieldAddNewButton::class);
+            }
+        });
+
+        return $this;
+    }
+
+    /**
+     * Add addable grid field component
+     *
+     * @param  GridFieldComponent|null $component
+     * @return $this
+     */
+    public function enableAddable(GridFieldComponent $component = null)
+    {
+        // Use default addable grid field component
+        if (is_null($component)) {
+            $component = new GridFieldAddNewButton('buttons-before-left');
+        }
+
+        // Add grid field component
+        $this->gridField->getConfig()->addComponent($component);
+
+        return $this;
     }
 
     /**
