@@ -57,6 +57,8 @@ class HasOneSelectorGridField extends GridField
         $this->setDataClass($dataClass);
         // Set the owner data object that contains the has one relation
         $this->setOwner($owner);
+        // Load relation value from session
+        $this->loadRelationFromSession();
 
         // Instance of data list that manages the grid field data
         $dataList = HasOneSelectorDataList::create($this);
@@ -170,9 +172,12 @@ class HasOneSelectorGridField extends GridField
     public function setRecord($object)
     {
         $owner      = $this->getOwner();
-        $recordName = $this->getName() . 'ID';
+        $recordName = $this->getRelationName();
 
         $owner->{$recordName} = is_null($object) ? 0 : $object->ID;
+
+        // Store relation value in session
+        $this->storeRelationInSession($owner->{$recordName});
     }
 
     /**
@@ -206,7 +211,7 @@ class HasOneSelectorGridField extends GridField
     public function getList()
     {
         // Get current record ID
-        $id = (int) $this->getOwner()->{$this->getName() . 'ID'};
+        $id = (int) $this->getOwner()->{$this->getRelationName()};
 
         // Filter current list to display current record (has one) value
         return $this->list->filter('ID', $id);
@@ -242,9 +247,69 @@ class HasOneSelectorGridField extends GridField
 
         // Append field to hold the value of has one relation
         $owner      = $this->getOwner();
-        $recordName = $this->getName() . 'ID';
+        $recordName = $this->getRelationName();
         $content['body'] .= $this->valueField->setValue($owner->{$recordName})->Field();
 
         return parent::getOptionalTableBody($content);
+    }
+
+    /**
+     * Get relation name within the owner object. This includes the "ID" at the end
+     *
+     * @return string
+     */
+    protected function getRelationName()
+    {
+        return $this->getName() . 'ID';
+    }
+
+    /**
+     * Store relation value in session
+     *
+     * @param int $recordId
+     */
+    protected function storeRelationInSession($recordId)
+    {
+        // Session name for current owner
+        $sessionName = $this->getSessionName();
+
+        // Store relation and owner in session
+        Session::set($sessionName, [
+            'Relation'   => $this->getRelationName(),
+            'RelationID' => (int) $recordId,
+        ]);
+    }
+
+    /**
+     * Load relation value from data stored in session
+     */
+    protected function loadRelationFromSession()
+    {
+        // Session name for current owner
+        $sessionName = $this->getSessionName();
+
+        // Store relation value in session
+        $data = Session::get($sessionName);
+        if (!empty($data['Relation']) && !empty($data['RelationID'])) {
+            // Get owner object
+            $owner = $this->getOwner();
+
+            // Set relation value
+            $owner->{$data['Relation']} = $data['RelationID'];
+        }
+    }
+
+    /**
+     * Get session name for current owner to store relation value
+     *
+     * @return string
+     */
+    protected function getSessionName()
+    {
+        // Get owner object
+        $owner = $this->getOwner();
+
+        // Session name for current owner
+        return sprintf('%s_%s_%s', self::class, $owner->ClassName, $owner->ID);
     }
 }
