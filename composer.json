@@ -40,9 +40,9 @@
     },
     "extra": {
         "expose": [
-            "client",
-            "installer-name": "hasoneselector"
-        ]
+            "client"
+        ],
+        "installer-name": "hasoneselector"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
