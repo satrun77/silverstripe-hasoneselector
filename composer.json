@@ -10,7 +10,7 @@
         "gridfield",
         "cwp"
     ],
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "homepage": "https://github.com/satrun77/silverstripe-hasoneselector",
     "license": "MIT",
     "authors": [
