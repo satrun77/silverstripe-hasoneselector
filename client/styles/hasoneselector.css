@@ -1,11 +1,13 @@
-.grid-field {
-    margin-bottom: 1rem;
+.b-hasoneselector-field .grid-field {
+    margin-top: 1rem;
 }
-.grid-field__table {
+
+.b-hasoneselector-field .grid-field__table {
     margin: 0;
     min-width: auto;
     border: 1px solid #dbe0e9;
 }
-.grid-field__table td {
+
+.b-hasoneselector-field .grid-field__table td {
     padding: 0.8rem;
 }
