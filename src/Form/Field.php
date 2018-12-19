@@ -44,6 +44,8 @@ class Field extends CompositeField
         // Create grid field
         $this->initGridField($name, $title, $owner, $dataClass);
 
+        $this->addExtraClass('b-hasoneselector-field');
+
         // Create composite field with hidden field holds the value and grid field to find and select has one relation
         parent::__construct([
             $this->getValueHolderField(),
