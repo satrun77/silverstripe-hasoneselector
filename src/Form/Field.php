@@ -10,6 +10,7 @@ use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldComponent;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 
 /**
  * Class Field provides CMS field to manage selecting/adding/editing object within
@@ -46,11 +47,36 @@ class Field extends CompositeField
 
         $this->addExtraClass('b-hasoneselector-field');
 
+        // Ensure there is a left label to allow for field to be aligned with others
+        $this->leftTitle = ' ';
+
         // Create composite field with hidden field holds the value and grid field to find and select has one relation
         parent::__construct([
             $this->getValueHolderField(),
             $this->gridField,
         ]);
+    }
+
+    /**
+     * Returns a "field holder" for this field.
+     *
+     * Forms are constructed by concatenating a number of these field holders.
+     *
+     * The default field holder is a label and a form field inside a div.
+     *
+     * @see FieldHolder.ss
+     *
+     * @param array $properties
+     *
+     * @return DBHTMLText
+     */
+    public function FieldHolder($properties = [])
+    {
+        // Set title based on left title property
+        $properties['Title'] = $this->leftTitle;
+
+        // Render field holder
+        return parent::FieldHolder($properties);
     }
 
     /**
