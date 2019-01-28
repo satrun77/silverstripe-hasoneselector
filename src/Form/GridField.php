@@ -7,13 +7,15 @@ use Moo\HasOneSelector\ORM\DataList;
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridField as SSGridField;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridField_ActionMenu;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldButtonRow;
+use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldFilterHeader;
-use SilverStripe\Forms\GridField\GridFieldPageCount;
-use SilverStripe\Forms\GridField\GridFieldPaginator;
-use SilverStripe\Forms\GridField\GridFieldSortableHeader;
-use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\View\Requirements;
@@ -64,12 +66,15 @@ class GridField extends SSGridField
         Requirements::css('moo/hasoneselector:client/styles/hasoneselector.css');
 
         // Initiate grid field configuration based on relation editor
-        $config = GridFieldConfig_RelationEditor::create();
-        $config->removeComponentsByType(GridFieldToolbarHeader::class);
-        $config->removeComponentsByType(GridFieldSortableHeader::class);
-        $config->removeComponentsByType(GridFieldFilterHeader::class);
-        $config->removeComponentsByType(GridFieldPageCount::class);
-        $config->removeComponentsByType(GridFieldPaginator::class);
+        $config = new GridFieldConfig();
+        $config->addComponent(new GridFieldButtonRow('before'));
+        $config->addComponent(new GridFieldAddNewButton('buttons-before-left'));
+        $config->addComponent(new GridFieldAddExistingAutocompleter('buttons-before-right'));
+        $config->addComponent(new GridFieldDataColumns());
+        $config->addComponent(new GridFieldEditButton());
+        $config->addComponent(new GridFieldDeleteAction(true));
+        $config->addComponent(new GridField_ActionMenu());
+        $config->addComponent(new GridFieldDetailForm());
 
         // Set the data class of the list
         $this->setDataClass($dataClass);
