@@ -1,0 +1,7 @@
+---
+Name: hasoneselector
+---
+
+SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
+  extensions:
+    - Moo\HasOneSelector\Extension\GridFieldItemRequest
