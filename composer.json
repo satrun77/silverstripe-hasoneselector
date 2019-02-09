@@ -22,7 +22,6 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
         "silverstripe/vendor-plugin": "^1.0",
         "silverstripe/framework": "^4.1"
     },
