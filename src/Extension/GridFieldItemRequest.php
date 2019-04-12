@@ -2,6 +2,8 @@
 
 namespace Moo\HasOneSelector\Extension;
 
+use Moo\HasOneSelector\Form\GridField;
+use SilverStripe\Control\Controller;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
@@ -32,5 +34,28 @@ class GridFieldItemRequest extends DataExtension
         if ($find) {
             $find->setField('Link', $this->getOwner()->Link());
         }
+    }
+
+    /**
+     * Hook after saving an object
+     * @param mixed $record
+     */
+    public function onAfterSave($record)
+    {
+        // Close saved object and remove the value of the ID
+        $unsavedRecord     = clone $record;
+        $unsavedRecord->ID = 0;
+        // Get name of session for unsaved object
+        $unsavedSessionName = GridField::formatSessionName($unsavedRecord);
+        // Current session
+        $session = Controller::curr()->getRequest()->getSession();
+
+        // If we have value stored in the session, then clear that value
+        if ($session->get($unsavedSessionName)) {
+            $session->clear($unsavedSessionName);
+        }
+
+        // Remove unsaved recored
+        unset($unsavedRecord);
     }
 }

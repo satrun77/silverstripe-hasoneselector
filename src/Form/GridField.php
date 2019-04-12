@@ -336,6 +336,17 @@ class GridField extends SSGridField
         $owner = $this->getOwner();
 
         // Session name for current owner
+        return static::formatSessionName($owner);
+    }
+
+    /**
+     * Get formatted name for session to store relation value
+     *
+     * @param  DataObject $owner
+     * @return string
+     */
+    public static function formatSessionName($owner)
+    {
         return sprintf('%s_%s_%s', self::class, $owner->ClassName, $owner->ID);
     }
 }
