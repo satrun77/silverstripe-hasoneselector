@@ -15,6 +15,11 @@ class HasOneSelectorTest extends FunctionalTest
 {
     protected static $fixture_file = 'HasOneSelectorTest.yml';
 
+    protected static $extra_dataobjects = [
+        PageTest::class,
+        ResourceTest::class,
+    ];
+
     public function testNoItemSelected()
     {
         $page = $this->getPage('page-1');

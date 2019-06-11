@@ -7,6 +7,8 @@ use SilverStripe\ORM\DataObject;
 
 class PageTest extends DataObject implements TestOnly
 {
+    private static $table_name = 'PageTest';
+
     private static $db = [
         'Title' => 'Varchar',
     ];

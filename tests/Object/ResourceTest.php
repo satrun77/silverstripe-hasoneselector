@@ -7,6 +7,8 @@ use SilverStripe\ORM\DataObject;
 
 class ResourceTest extends DataObject implements TestOnly
 {
+    private static $table_name = 'ResourceTest';
+
     private static $db = [
         'Title' => 'Varchar',
     ];

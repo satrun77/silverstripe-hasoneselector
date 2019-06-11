@@ -2,22 +2,28 @@ language: php
 
 env:
   global:
-    - COMPOSER_ROOT_VERSION="3.1.x-dev"
+    - COMPOSER_ROOT_VERSION="4.4.x-dev"
+    - SS_BASE_URL="http://localhost:8080/"
+    - SS_ENVIRONMENT_TYPE="dev"
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
 
 matrix:
   include:
     - php: 7.1
-      env: DB=MYSQL RECIPE_VERSION=4.2.x-dev
+      env: DB=MYSQL
     - php: 7.2
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev
+      env: DB=MYSQL
 
 before_script:
   - phpenv rehash
   - phpenv config-rm xdebug.ini
-
+  - export PATH=~/.composer/vendor/bin:$PATH
   - composer validate
-  - composer require silverstripe/recipe-core "$RECIPE_VERSION"  --no-update
-  - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
+  - composer require --no-update silverstripe/recipe-testing:^1 silverstripe/recipe-cms:4.4.x-dev
+  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.clover
