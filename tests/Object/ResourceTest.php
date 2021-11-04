@@ -5,6 +5,10 @@ namespace Moo\HasOneSelector\Tests\Object;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class ResourceTest extends DataObject implements TestOnly
 {
     private static $table_name = 'ResourceTest';

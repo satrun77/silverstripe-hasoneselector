@@ -5,6 +5,7 @@ namespace Moo\HasOneSelector\Form;
 use Exception;
 use Moo\HasOneSelector\ORM\DataList;
 use SilverStripe\Control\Controller;
+use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridField as SSGridField;
 use SilverStripe\Forms\GridField\GridField_ActionMenu;
@@ -21,46 +22,34 @@ use SilverStripe\ORM\SS_List;
 use SilverStripe\View\Requirements;
 
 /**
- * Class GridField instance of grid field
+ * Class GridField instance of grid field.
  */
 class GridField extends SSGridField
 {
     /**
-     * Name of the list data class
-     *
-     * @var string
+     * Name of the list data class.
      */
-    protected $dataClass;
+    protected string $dataClass = '';
 
     /**
-     * Instance of data object that contains the has one relation
-     *
-     * @var DataObject
+     * Instance of data object that contains the has one relation.
      */
-    protected $owner;
+    protected ?DataObject $owner = null;
 
     /**
-     * Text to display when no record selected
-     *
-     * @var string
+     * Text to display when no record selected.
      */
-    protected $emptyString = 'No item selected';
+    protected string $emptyString = 'No item selected';
 
     /**
-     * Instance of form field that holds the value
-     *
-     * @var FormField
+     * Instance of form field that holds the value.
      */
-    protected $valueField;
+    protected ?FormField $valueField = null;
 
     /**
      * HasOneSelector GridField constructor.
-     * @param string     $name
-     * @param string     $title
-     * @param DataObject $owner
-     * @param string     $dataClass
      */
-    public function __construct($name, $title, DataObject $owner, $dataClass = DataObject::class)
+    public function __construct(string $name, string $title, DataObject $owner, string $dataClass = DataObject::class)
     {
         // Include styles
         Requirements::css('moo/hasoneselector:client/styles/hasoneselector.css');
@@ -87,18 +76,15 @@ class GridField extends SSGridField
         $dataList = DataList::create($this);
 
         // Set empty string based on the data class
-        $this->setEmptyString(sprintf('No %s selected', strtolower(singleton($dataClass)->singular_name())));
+        $this->setEmptyString(sprintf('No %s selected', mb_strtolower(singleton($dataClass)->singular_name())));
 
         parent::__construct($name, $title, $dataList, $config);
     }
 
     /**
-     * Set instance of value holder field
-     *
-     * @param  FormField $field
-     * @return $this
+     * Set instance of value holder field.
      */
-    public function setValueHolderField(FormField $field)
+    public function setValueHolderField(FormField $field): self
     {
         $this->valueField = $field;
 
@@ -106,46 +92,43 @@ class GridField extends SSGridField
     }
 
     /**
-     * Defined the columns to be rendered in the field
-     *
-     * @param  array $fields
-     * @return $this
+     * Defined the columns to be rendered in the field.
      */
-    public function setDisplayFields(array $fields)
+    public function setDisplayFields(array $fields): self
     {
         // Get grid field configuration
         $config = $this->getConfig();
 
         // Define columns to display in grid field
-        $config->getComponentByType(GridFieldDataColumns::class)->setDisplayFields($fields);
+        $component = $config->getComponentByType(GridFieldDataColumns::class);
+        assert($component instanceof GridFieldDataColumns);
+
+        $component->setDisplayFields($fields);
 
         return $this;
     }
 
     /**
-     * Apply transformation of the displayed data within a specific column(s)
-     *
-     * @param  array $formatting
-     * @return $this
+     * Apply transformation of the displayed data within a specific column(s).
      */
-    public function setFieldFormatting(array $formatting)
+    public function setFieldFormatting(array $formatting): self
     {
         // Get grid field configuration
         $config = $this->getConfig();
 
         // Customise the display of the column
-        $config->getComponentByType(GridFieldDataColumns::class)->setFieldFormatting($formatting);
+        $component = $config->getComponentByType(GridFieldDataColumns::class);
+        assert($component instanceof GridFieldDataColumns);
+
+        $component->setFieldFormatting($formatting);
 
         return $this;
     }
 
     /**
-     * Set empty string when no record selected
-     *
-     * @param  string $string
-     * @return $this
+     * Set empty string when no record selected.
      */
-    public function setEmptyString($string)
+    public function setEmptyString(string $string): self
     {
         $this->emptyString = $string;
 
@@ -153,12 +136,9 @@ class GridField extends SSGridField
     }
 
     /**
-     * set the name of the data class for current list
-     *
-     * @param  string $class
-     * @return $this
+     * set the name of the data class for current list.
      */
-    public function setDataClass($class)
+    public function setDataClass(string $class): self
     {
         $this->dataClass = $class;
 
@@ -166,34 +146,29 @@ class GridField extends SSGridField
     }
 
     /**
-     * Get the name of the data class for current list
-     *
-     * @return string
+     * Get the name of the data class for current list.
      */
-    public function getDataClass()
+    public function getDataClass(): string
     {
         return $this->dataClass;
     }
 
     /**
-     * Get the record of the has one relation for current owner object
+     * Get the record of the has one relation for current owner object.
      *
-     * @return DataObject|null
      * @throws Exception
      */
-    public function getRecord()
+    public function getRecord(): ?DataObject
     {
         return $this->getOwner()->{rtrim($this->getName(), 'ID')}();
     }
 
     /**
-     * Set the record of the has one relation for current owner object
+     * Set the record of the has one relation for current owner object.
      *
-     * @param  DataObject|null $object
-     * @return void
      * @throws Exception
      */
-    public function setRecord($object)
+    public function setRecord(?DataObject $object): void
     {
         $owner      = $this->getOwner();
         $recordName = $this->getRelationName();
@@ -201,16 +176,13 @@ class GridField extends SSGridField
         $owner->{$recordName} = is_null($object) ? 0 : $object->ID;
 
         // Store relation value in session
-        $this->storeRelationInSession($owner->{$recordName});
+        $this->storeRelationInSession((int) $owner->{$recordName});
     }
 
     /**
-     * Set instance of data object that has the has one relation
-     *
-     * @param  DataObject $owner
-     * @return $this
+     * Set instance of data object that has the has one relation.
      */
-    public function setOwner(DataObject $owner)
+    public function setOwner(DataObject $owner): self
     {
         $this->owner = $owner;
 
@@ -218,11 +190,9 @@ class GridField extends SSGridField
     }
 
     /**
-     * Get instance of data object that has the has one relation
-     *
-     * @return DataObject
+     * Get instance of data object that has the has one relation.
      */
-    public function getOwner()
+    public function getOwner(): ?DataObject
     {
         return $this->owner;
     }
@@ -238,15 +208,16 @@ class GridField extends SSGridField
         $id = (int) $this->getOwner()->{$this->getRelationName()};
 
         // Filter current list to display current record (has one) value
-        return $this->list->filter('ID', $id);
+        $list = parent::getList();
+        assert($list instanceof DataList);
+
+        return $list->filter('ID', $id);
     }
 
     /**
      * Get the data source after applying every {@link GridField_DataManipulator} to it.
-     *
-     * @return SS_List
      */
-    public function getManipulatedList()
+    public function getManipulatedList(): SS_List
     {
         // Call manipulation from parent class to update current record (has one)
         parent::getManipulatedList();
@@ -256,7 +227,6 @@ class GridField extends SSGridField
     }
 
     /**
-     * @param  array  $content
      * @return string
      */
     protected function getOptionalTableBody(array $content)
@@ -265,7 +235,7 @@ class GridField extends SSGridField
         $noItemsText = _t('GridField.NoItemsFound', 'No items found');
 
         // If we have no items text in the body, then replace the text with customised string
-        if (strpos($content['body'], $noItemsText) !== false) {
+        if (mb_strpos($content['body'], $noItemsText) !== false) {
             $content['body'] = str_replace($noItemsText, $this->emptyString, $content['body']);
         }
 
@@ -278,21 +248,17 @@ class GridField extends SSGridField
     }
 
     /**
-     * Get relation name within the owner object. This includes the "ID" at the end
-     *
-     * @return string
+     * Get relation name within the owner object. This includes the "ID" at the end.
      */
-    protected function getRelationName()
+    protected function getRelationName(): string
     {
-        return $this->getName() . 'ID';
+        return $this->getName().'ID';
     }
 
     /**
-     * Store relation value in session
-     *
-     * @param int $recordId
+     * Store relation value in session.
      */
-    protected function storeRelationInSession($recordId)
+    protected function storeRelationInSession(int $recordId): void
     {
         // Session name for current owner
         $sessionName = $this->getSessionName();
@@ -301,14 +267,14 @@ class GridField extends SSGridField
         $session = Controller::curr()->getRequest()->getSession();
         $session->set($sessionName, [
             'Relation'   => $this->getRelationName(),
-            'RelationID' => (int) $recordId,
+            'RelationID' => $recordId,
         ]);
     }
 
     /**
-     * Load relation value from data stored in session
+     * Load relation value from data stored in session.
      */
-    protected function loadRelationFromSession()
+    protected function loadRelationFromSession(): void
     {
         // Session name for current owner
         $sessionName = $this->getSessionName();
@@ -326,11 +292,9 @@ class GridField extends SSGridField
     }
 
     /**
-     * Get session name for current owner to store relation value
-     *
-     * @return string
+     * Get session name for current owner to store relation value.
      */
-    protected function getSessionName()
+    protected function getSessionName(): string
     {
         // Get owner object
         $owner = $this->getOwner();
@@ -340,12 +304,9 @@ class GridField extends SSGridField
     }
 
     /**
-     * Get formatted name for session to store relation value
-     *
-     * @param  DataObject $owner
-     * @return string
+     * Get formatted name for session to store relation value.
      */
-    public static function formatSessionName($owner)
+    public static function formatSessionName(DataObject $owner): string
     {
         return sprintf('%s_%s_%s', self::class, $owner->ClassName, $owner->ID);
     }

@@ -14,31 +14,26 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 
 /**
  * Class Field provides CMS field to manage selecting/adding/editing object within
- * has_one relation of the current object being edited
+ * has_one relation of the current object being edited.
  */
 class Field extends CompositeField
 {
     /**
-     * Instance of form field that find and display selected record
-     *
-     * @var GridField
+     * Instance of form field that find and display selected record.
      */
-    protected $gridField;
+    protected ?GridField $gridField = null;
 
     /**
-     * Instance of form field that holds the value
-     *
-     * @var FormField
+     * Instance of form field that holds the value.
      */
-    protected $valueField;
+    protected ?FormField $valueField = null;
 
     /**
-     * HasOneSelector Field constructor
+     * HasOneSelector Field constructor.
      *
-     * @param string     $name
-     * @param string     $title
-     * @param DataObject $owner
-     * @param string     $dataClass
+     * @param string $name
+     * @param string $title
+     * @param string $dataClass
      */
     public function __construct($name, $title, DataObject $owner, $dataClass = DataObject::class)
     {
@@ -80,15 +75,13 @@ class Field extends CompositeField
     }
 
     /**
-     * Get instance of value holder field that hold the value of has one
-     *
-     * @return FormField
+     * Get instance of value holder field that hold the value of has one.
      */
-    protected function getValueHolderField()
+    protected function getValueHolderField(): FormField
     {
         if (is_null($this->valueField)) {
             // Name of the has one relation
-            $recordName = $this->gridField->getName() . 'ID';
+            $recordName = $this->gridField->getName().'ID';
 
             // Field to hold the value
             $this->valueField = HiddenField::create($recordName, '', '');
@@ -98,16 +91,14 @@ class Field extends CompositeField
     }
 
     /**
-     * Initiate instance of grid field. This is a subclass of GridField
-     *
-     * @param  string     $name
-     * @param  string     $title
-     * @param  DataObject $owner
-     * @param  string     $dataClass
-     * @return GridField
+     * Initiate instance of grid field. This is a subclass of GridField.
      */
-    protected function initGridField($name, $title, DataObject $owner, $dataClass = DataObject::class)
-    {
+    protected function initGridField(
+        string $name,
+        string $title,
+        DataObject $owner,
+        string $dataClass = DataObject::class
+    ): GridField {
         if (is_null($this->gridField)) {
             $this->gridField = GridField::create($name, $title, $owner, $dataClass);
         }
@@ -117,11 +108,9 @@ class Field extends CompositeField
     }
 
     /**
-     * Remove the linkable grid field component
-     *
-     * @return $this
+     * Remove the linkable grid field component.
      */
-    public function removeLinkable()
+    public function removeLinkable(): self
     {
         // Remove grid field linkable component
         $this->gridField->getConfig()->getComponents()->each(function ($component) {
@@ -134,12 +123,9 @@ class Field extends CompositeField
     }
 
     /**
-     * Add linkable grid field component
-     *
-     * @param  GridFieldComponent|null $component
-     * @return $this
+     * Add linkable grid field component.
      */
-    public function enableLinkable(GridFieldComponent $component = null)
+    public function enableLinkable(GridFieldComponent $component = null): self
     {
         // Use default linkable grid field component
         if (is_null($component)) {
@@ -153,11 +139,9 @@ class Field extends CompositeField
     }
 
     /**
-     * Remove the addable grid field component
-     *
-     * @return $this
+     * Remove the addable grid field component.
      */
-    public function removeAddable()
+    public function removeAddable(): self
     {
         // Remove grid field addable component
         $this->gridField->getConfig()->getComponents()->each(function ($component) {
@@ -170,12 +154,9 @@ class Field extends CompositeField
     }
 
     /**
-     * Add addable grid field component
-     *
-     * @param  GridFieldComponent|null $component
-     * @return $this
+     * Add addable grid field component.
      */
-    public function enableAddable(GridFieldComponent $component = null)
+    public function enableAddable(GridFieldComponent $component = null): self
     {
         // Use default addable grid field component
         if (is_null($component)) {
@@ -190,12 +171,14 @@ class Field extends CompositeField
 
     /**
      * Proxy any undefined methods to the grid field as this is the main field and the composite is wrapper to manage
-     * the field and value of has one
+     * the field and value of has one.
      *
-     * @param  string    $method
-     * @param  array     $arguments
-     * @return mixed
+     * @param string $method
+     * @param array  $arguments
+     *
      * @throws Exception
+     *
+     * @return mixed
      */
     public function __call($method, $arguments = [])
     {

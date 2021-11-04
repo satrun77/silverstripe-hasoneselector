@@ -12,12 +12,9 @@ class GridFieldItemRequest extends DataExtension
 {
     /**
      * Hook after update breadcrumbs in grid field to ensure not saved item in breadcrumb have
-     * correct URL to adding new item
-     *
-     * @param  ArrayList $items
-     * @return void
+     * correct URL to adding new item.
      */
-    public function updateBreadcrumbs(ArrayList $items)
+    public function updateBreadcrumbs(ArrayList $items): void
     {
         /** @var DataObject $record */
         $record = $this->getOwner()->record;
@@ -37,10 +34,9 @@ class GridFieldItemRequest extends DataExtension
     }
 
     /**
-     * Hook after saving an object
-     * @param mixed $record
+     * Hook after saving an object.
      */
-    public function onAfterSave($record)
+    public function onAfterSave(DataObject $record): void
     {
         // Close saved object and remove the value of the ID
         $unsavedRecord     = clone $record;

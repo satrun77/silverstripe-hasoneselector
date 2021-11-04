@@ -9,18 +9,14 @@ use SilverStripe\ORM\DataObject;
 
 /**
  * Class DataList is data list to manage add/remove managed object from the
- * HasOneSelectorField class
+ * HasOneSelectorField class.
  */
 class DataList extends BaseDataList
 {
-    /**
-     * @var GridField
-     */
-    protected $gridField;
+    protected ?GridField $gridField = null;
 
     /**
      * HasOneSelectorDataList constructor.
-     * @param GridField $gridField
      */
     public function __construct(GridField $gridField)
     {
@@ -30,25 +26,25 @@ class DataList extends BaseDataList
     }
 
     /**
-     * Set the current selected record into the has one relation
+     * Set the current selected record into the has one relation.
      *
-     * @param  DataObject $item
-     * @return void
+     * @param DataObject $item
+     *
      * @throws Exception
      */
-    public function add($item)
+    public function add($item): void
     {
         $this->gridField->setRecord($item);
     }
 
     /**
-     * Clear the record within the has one relation
+     * Clear the record within the has one relation.
      *
-     * @param  DataObject $item
-     * @return void
+     * @param DataObject $item
+     *
      * @throws Exception
      */
-    public function remove($item)
+    public function remove($item): void
     {
         $this->gridField->setRecord(null);
     }
