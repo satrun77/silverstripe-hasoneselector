@@ -3,6 +3,7 @@
 namespace Moo\HasOneSelector\Form;
 
 use Exception;
+use Moo\HasOneSelector\ORM\DataList;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
@@ -11,6 +12,7 @@ use SilverStripe\Forms\GridField\GridFieldComponent;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\SS_List;
 
 /**
  * Class Field provides CMS field to manage selecting/adding/editing object within
@@ -48,7 +50,7 @@ class Field extends CompositeField
         // Create composite field with hidden field holds the value and grid field to find and select has one relation
         parent::__construct([
             $this->getValueHolderField(),
-            $this->gridField,
+            $this->getGridField(),
         ]);
     }
 
@@ -81,13 +83,21 @@ class Field extends CompositeField
     {
         if (is_null($this->valueField)) {
             // Name of the has one relation
-            $recordName = $this->gridField->getName().'ID';
+            $recordName = $this->getGridField()->getName().'ID';
 
             // Field to hold the value
             $this->valueField = HiddenField::create($recordName, '', '');
         }
 
         return $this->valueField;
+    }
+
+    /**
+     * Get instance of grid field embed in wrapper field.
+     */
+    public function getGridField(): GridField
+    {
+        return $this->gridField;
     }
 
     /**
@@ -101,10 +111,20 @@ class Field extends CompositeField
     ): GridField {
         if (is_null($this->gridField)) {
             $this->gridField = GridField::create($name, $title, $owner, $dataClass);
+            // Instance of data list that manages the grid field data
+            $this->gridField->setList($this->createList());
         }
         $this->gridField->setValueHolderField($this->getValueHolderField());
 
         return $this->gridField;
+    }
+
+    /**
+     * Create data list for grid field.
+     */
+    protected function createList(): SS_List
+    {
+        return DataList::create($this->getGridField());
     }
 
     /**
@@ -113,9 +133,9 @@ class Field extends CompositeField
     public function removeLinkable(): self
     {
         // Remove grid field linkable component
-        $this->gridField->getConfig()->getComponents()->each(function ($component) {
+        $this->getGridField()->getConfig()->getComponents()->each(function ($component) {
             if ($component instanceof GridFieldAddExistingAutocompleter) {
-                $this->gridField->getConfig()->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
+                $this->getGridField()->getConfig()->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
             }
         });
 
@@ -133,7 +153,7 @@ class Field extends CompositeField
         }
 
         // Add grid field component
-        $this->gridField->getConfig()->addComponent($component);
+        $this->getGridField()->getConfig()->addComponent($component);
 
         return $this;
     }
@@ -144,9 +164,9 @@ class Field extends CompositeField
     public function removeAddable(): self
     {
         // Remove grid field addable component
-        $this->gridField->getConfig()->getComponents()->each(function ($component) {
+        $this->getGridField()->getConfig()->getComponents()->each(function ($component) {
             if ($component instanceof GridFieldAddNewButton) {
-                $this->gridField->getConfig()->removeComponentsByType(GridFieldAddNewButton::class);
+                $this->getGridField()->getConfig()->removeComponentsByType(GridFieldAddNewButton::class);
             }
         });
 
@@ -164,7 +184,7 @@ class Field extends CompositeField
         }
 
         // Add grid field component
-        $this->gridField->getConfig()->addComponent($component);
+        $this->getGridField()->getConfig()->addComponent($component);
 
         return $this;
     }
@@ -182,10 +202,6 @@ class Field extends CompositeField
      */
     public function __call($method, $arguments = [])
     {
-        if ($this->gridField instanceof GridField) {
-            return $this->gridField->{$method}(...$arguments);
-        }
-
-        return parent::__call($method, $arguments);
+        return $this->getGridField()->{$method}(...$arguments);
     }
 }

@@ -5,7 +5,6 @@ namespace Moo\HasOneSelector\Form;
 use Exception;
 use Moo\HasOneSelector\ORM\DataList;
 use SilverStripe\Control\Controller;
-use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridField as SSGridField;
 use SilverStripe\Forms\GridField\GridField_ActionMenu;
@@ -72,13 +71,10 @@ class GridField extends SSGridField
         // Load relation value from session
         $this->loadRelationFromSession();
 
-        // Instance of data list that manages the grid field data
-        $dataList = DataList::create($this);
-
         // Set empty string based on the data class
         $this->setEmptyString(sprintf('No %s selected', mb_strtolower(singleton($dataClass)->singular_name())));
 
-        parent::__construct($name, $title, $dataList, $config);
+        parent::__construct($name, $title, null, $config);
     }
 
     /**
