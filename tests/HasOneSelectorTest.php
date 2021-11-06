@@ -20,6 +20,9 @@ use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
 
+/**
+ * @internal
+ */
 class HasOneSelectorTest extends SapphireTest
 {
     public static function tearDownAfterClass()

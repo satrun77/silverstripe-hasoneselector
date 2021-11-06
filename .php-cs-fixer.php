@@ -7,6 +7,7 @@ return $config->setRules([
     '@PSR12' => true,
     '@PhpCsFixer' => true,
     '@Symfony' => true,
+    'php_unit_test_class_requires_covers' => false,
     'protected_to_private' => false,
     'yoda_style' => false,
     'no_trailing_comma_in_list_call' => false,

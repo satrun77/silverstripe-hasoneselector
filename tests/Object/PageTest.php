@@ -5,6 +5,9 @@ namespace Moo\HasOneSelector\Tests\Object;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
 
+/**
+ * @internal
+ */
 class PageTest extends DataObject implements TestOnly
 {
     private static $table_name = 'PageTest';
