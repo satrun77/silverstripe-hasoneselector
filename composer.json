@@ -7,8 +7,7 @@
         "formfield",
         "cms",
         "has_one",
-        "gridfield",
-        "cwp"
+        "gridfield"
     ],
     "type": "silverstripe-vendormodule",
     "homepage": "https://github.com/satrun77/silverstripe-hasoneselector",
@@ -22,16 +21,17 @@
         }
     ],
     "require": {
-        "silverstripe/vendor-plugin": "^1.0",
+        "php": ">=7.4",
         "silverstripe/framework": "^4.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
-        "silverstripe/versioned": "^1"
+        "friendsofphp/php-cs-fixer": "^3.2"
     },
     "autoload": {
         "psr-4": {
-            "Moo\\HasOneSelector\\": "src/"
+            "Moo\\HasOneSelector\\": "src/",
+            "Moo\\Test\\": "tests/"
         }
     },
     "support": {
@@ -44,5 +44,10 @@
         "installer-name": "hasoneselector"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "fix": "php-cs-fixer fix src tests --allow-risky=yes --config=.php-cs-fixer.php",
+        "test": "phpunit tests '' flush=1",
+        "coverage": "phpunit tests --coverage-clover coverage/clover.xml"
+    }
 }
