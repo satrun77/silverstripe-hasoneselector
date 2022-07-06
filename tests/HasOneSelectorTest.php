@@ -25,7 +25,7 @@ use SilverStripe\View\ArrayData;
  */
 class HasOneSelectorTest extends SapphireTest
 {
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         // Disable teardown to prevent db access
     }
@@ -39,7 +39,7 @@ class HasOneSelectorTest extends SapphireTest
         new Form(new RequestHandler(), 'Form', FieldList::create($field), FieldList::create());
         $html = $field->FieldHolder();
 
-        self::assertContains('No data selected', $html);
+        self::assertStringContainsString('No data selected', (string)$html);
         $this->assertEquals(ResourceTest::class, $field->getDataClass());
         $this->assertNull($field->getRecord());
     }
@@ -87,7 +87,7 @@ class HasOneSelectorTest extends SapphireTest
         $field->getList()->remove($resource);
         $html = $field->FieldHolder();
 
-        $this->assertContains('No resource test selected', $html);
+        self::assertStringContainsString('No resource test selected', (string)$html);
         $this->assertEquals(ResourceTest::class, $field->getDataClass());
     }
 
