@@ -10,9 +10,7 @@ HasOneSelector is a module that provides CMS field to manage data object defined
 
 ## Requirements
 
-* SilverStripe CMS ^4.1
-
-For a SilverStripe 3.x compatible version, please see the [3.x branch, or 1.x releases](https://github.com/satrun77/silverstripe-hasoneselector/tree/3.x).
+* SilverStripe CMS ^5.0
 
 ## Installation via Composer
 	composer require moo/hasoneselector

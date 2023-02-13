@@ -6,3 +6,6 @@ _notes/
 /vendor
 /assets
 /resources
+.phpunit.cache/
+composer.lock
+public/

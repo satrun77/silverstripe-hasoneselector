@@ -36,7 +36,7 @@ class DataList extends \Moo\HasOneSelector\ORM\DataList implements TestOnly
         return $this->list;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->list);
     }
