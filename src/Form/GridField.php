@@ -16,8 +16,8 @@ use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
+use SilverStripe\Model\List\SS_List;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\SS_List;
 use SilverStripe\View\Requirements;
 
 /**
@@ -54,15 +54,15 @@ class GridField extends SSGridField
         Requirements::css('moo/hasoneselector:client/styles/hasoneselector.css');
 
         // Initiate grid field configuration based on relation editor
-        $config = new GridFieldConfig();
-        $config->addComponent(new GridFieldButtonRow('before'));
-        $config->addComponent(new GridFieldAddNewButton('buttons-before-left'));
-        $config->addComponent(new GridFieldAddExistingAutocompleter('buttons-before-right'));
-        $config->addComponent(new GridFieldDataColumns());
-        $config->addComponent(new GridFieldEditButton());
-        $config->addComponent(new GridFieldDeleteAction(true));
-        $config->addComponent(new GridField_ActionMenu());
-        $config->addComponent(new GridFieldDetailForm());
+        $config = GridFieldConfig::create();
+        $config->addComponent(GridFieldButtonRow::create('before'));
+        $config->addComponent(GridFieldAddNewButton::create('buttons-before-left'));
+        $config->addComponent(GridFieldAddExistingAutocompleter::create('buttons-before-right'));
+        $config->addComponent(GridFieldDataColumns::create());
+        $config->addComponent(GridFieldEditButton::create());
+        $config->addComponent(GridFieldDeleteAction::create(true));
+        $config->addComponent(GridField_ActionMenu::create());
+        $config->addComponent(GridFieldDetailForm::create());
 
         // Set the data class of the list
         $this->setDataClass($dataClass);
@@ -72,7 +72,7 @@ class GridField extends SSGridField
         $this->loadRelationFromSession();
 
         // Set empty string based on the data class
-        $this->setEmptyString(sprintf('No %s selected', mb_strtolower(singleton($dataClass)->singular_name())));
+        $this->setEmptyString(sprintf('No %s selected', mb_strtolower((string) singleton($dataClass)->singular_name())));
 
         parent::__construct($name, $title, null, $config);
     }
@@ -156,7 +156,7 @@ class GridField extends SSGridField
      */
     public function getRecord(): ?DataObject
     {
-        return $this->getOwner()->{rtrim($this->getName(), 'ID')}();
+        return $this->getOwner()->{mb_rtrim($this->getName(), 'ID')}();
     }
 
     /**
@@ -231,7 +231,7 @@ class GridField extends SSGridField
         $noItemsText = _t('GridField.NoItemsFound', 'No items found');
 
         // If we have no items text in the body, then replace the text with customised string
-        if (mb_strpos($content['body'], $noItemsText) !== false) {
+        if (mb_strpos((string) $content['body'], $noItemsText) !== false) {
             $content['body'] = str_replace($noItemsText, $this->emptyString, $content['body']);
         }
 

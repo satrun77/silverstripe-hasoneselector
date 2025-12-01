@@ -39,7 +39,7 @@ class HasOneSelectorTest extends SapphireTest
         new Form(new RequestHandler(), 'Form', FieldList::create($field), FieldList::create());
         $html = $field->FieldHolder();
 
-        self::assertStringContainsString('No data selected', (string)$html);
+        self::assertStringContainsString('No data selected', (string) $html);
         $this->assertEquals(ResourceTest::class, $field->getDataClass());
         $this->assertNull($field->getRecord());
     }
@@ -87,7 +87,7 @@ class HasOneSelectorTest extends SapphireTest
         $field->getList()->remove($resource);
         $html = $field->FieldHolder();
 
-        self::assertStringContainsString('No resource test selected', (string)$html);
+        self::assertStringContainsString('No resource test selected', (string) $html);
         $this->assertEquals(ResourceTest::class, $field->getDataClass());
     }
 
@@ -253,12 +253,12 @@ class HasOneSelectorTest extends SapphireTest
     protected function getGridFieldItemRequest(): GridFieldItemRequest
     {
         $extension = new GridFieldItemRequest();
-        $extension->setOwner(new class() {
+        $extension->setOwner(new class {
             public $record;
 
             public function __construct()
             {
-                $this->record = new class() {
+                $this->record = new class {
                     public function i18n_singular_name()
                     {
                         return 'Test';

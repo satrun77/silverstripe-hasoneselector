@@ -4,11 +4,11 @@ namespace Moo\HasOneSelector\Extension;
 
 use Moo\HasOneSelector\Form\GridField;
 use SilverStripe\Control\Controller;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
 
-class GridFieldItemRequest extends DataExtension
+class GridFieldItemRequest extends Extension
 {
     /**
      * Hook after update breadcrumbs in grid field to ensure not saved item in breadcrumb have
@@ -19,13 +19,11 @@ class GridFieldItemRequest extends DataExtension
         /** @var DataObject $record */
         $record = $this->getOwner()->record;
         // Breadcrumb item title
-        $name = _t('SilverStripe\\Forms\\GridField\\GridField.NewRecord', 'New {type}', ['type' => $record->i18n_singular_name()]);
+        $name = _t('SilverStripe\Forms\GridField\GridField.NewRecord', 'New {type}', ['type' => $record->i18n_singular_name()]);
 
         // Find item in breadcrumb for data object that is not yet saved that has link
         // with value of false
-        $find = $items->filterByCallback(function ($item) use ($name) {
-            return !$item->Link && $item->Title === $name;
-        })->first();
+        $find = $items->filterByCallback(fn ($item) => !$item->Link && $item->Title === $name)->first();
 
         // If we found and item, then ensure we have valid link
         if ($find) {
@@ -51,7 +49,7 @@ class GridFieldItemRequest extends DataExtension
             $session->clear($unsavedSessionName);
         }
 
-        // Remove unsaved recored
+        // Remove unsaved record
         unset($unsavedRecord);
     }
 }
