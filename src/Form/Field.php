@@ -10,9 +10,9 @@ use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldComponent;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\Model\List\SS_List;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\ORM\SS_List;
 
 /**
  * Class Field provides CMS field to manage selecting/adding/editing object within
@@ -32,12 +32,8 @@ class Field extends CompositeField
 
     /**
      * HasOneSelector Field constructor.
-     *
-     * @param string $name
-     * @param string $title
-     * @param string $dataClass
      */
-    public function __construct($name, $title, DataObject $owner, $dataClass = DataObject::class)
+    public function __construct(string $name, string $title, DataObject $owner, string $dataClass = DataObject::class)
     {
         // Create grid field
         $this->initGridField($name, $title, $owner, $dataClass);
@@ -107,7 +103,7 @@ class Field extends CompositeField
         string $name,
         string $title,
         DataObject $owner,
-        string $dataClass = DataObject::class
+        string $dataClass = DataObject::class,
     ): GridField {
         if (is_null($this->gridField)) {
             $this->gridField = GridField::create($name, $title, $owner, $dataClass);
@@ -133,7 +129,7 @@ class Field extends CompositeField
     public function removeLinkable(): self
     {
         // Remove grid field linkable component
-        $this->getGridField()->getConfig()->getComponents()->each(function ($component) {
+        $this->getGridField()->getConfig()->getComponents()->each(function ($component): void {
             if ($component instanceof GridFieldAddExistingAutocompleter) {
                 $this->getGridField()->getConfig()->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
             }
@@ -145,11 +141,11 @@ class Field extends CompositeField
     /**
      * Add linkable grid field component.
      */
-    public function enableLinkable(GridFieldComponent $component = null): self
+    public function enableLinkable(?GridFieldComponent $component = null): self
     {
         // Use default linkable grid field component
         if (is_null($component)) {
-            $component = new GridFieldAddExistingAutocompleter('buttons-before-right');
+            $component = GridFieldAddExistingAutocompleter::create('buttons-before-right');
         }
 
         // Add grid field component
@@ -164,7 +160,7 @@ class Field extends CompositeField
     public function removeAddable(): self
     {
         // Remove grid field addable component
-        $this->getGridField()->getConfig()->getComponents()->each(function ($component) {
+        $this->getGridField()->getConfig()->getComponents()->each(function ($component): void {
             if ($component instanceof GridFieldAddNewButton) {
                 $this->getGridField()->getConfig()->removeComponentsByType(GridFieldAddNewButton::class);
             }
@@ -176,11 +172,11 @@ class Field extends CompositeField
     /**
      * Add addable grid field component.
      */
-    public function enableAddable(GridFieldComponent $component = null): self
+    public function enableAddable(?GridFieldComponent $component = null): self
     {
         // Use default addable grid field component
         if (is_null($component)) {
-            $component = new GridFieldAddNewButton('buttons-before-left');
+            $component = GridFieldAddNewButton::create('buttons-before-left');
         }
 
         // Add grid field component
@@ -197,8 +193,6 @@ class Field extends CompositeField
      * @param array  $arguments
      *
      * @throws Exception
-     *
-     * @return mixed
      */
     public function __call($method, $arguments = [])
     {

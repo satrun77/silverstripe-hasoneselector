@@ -13,16 +13,12 @@ use SilverStripe\ORM\DataObject;
  */
 class DataList extends BaseDataList
 {
-    protected ?GridField $gridField = null;
-
     /**
      * HasOneSelectorDataList constructor.
      */
-    public function __construct(GridField $gridField)
+    public function __construct(protected ?GridField $gridField)
     {
-        $this->gridField = $gridField;
-
-        parent::__construct($gridField->getDataClass());
+        parent::__construct($this->gridField->getDataClass());
     }
 
     /**
